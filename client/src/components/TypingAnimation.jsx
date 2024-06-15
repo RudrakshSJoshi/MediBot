@@ -7,13 +7,13 @@ const TypingAnimation = () => {
         <TypeAnimation
             sequence={[
                 "Connect with Your Health AI",
-                1500,
+                500,
                 "Empower Your Health Journey",
-                1500,
+                500,
                 "Your Personal Health Companion",
-                1500,
+                500,
             ]}
-            speed={60}
+            speed={70}
             style={{
                 fontSize: "40px",
                 fontWeight: "bold",

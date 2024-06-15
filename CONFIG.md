@@ -1,3 +1,7 @@
+Got it! Let's focus on clarifying the setup steps in the `CONFIG.md` file while addressing the specific details you mentioned:
+
+---
+
 # Configuration Guide for Setting Up MediBot
 
 Follow these steps to set up and configure MediBot on your local machine.
@@ -29,7 +33,14 @@ Follow these steps to set up and configure MediBot on your local machine.
 
    Replace `python3` with `python` or `python3.12` as appropriate.
 
-2. **Activate the Virtual Environment:**
+2. **Set Up Virtual Environment as Interpreter in VS Code:**
+
+   - Open VS Code.
+   - Press `Ctrl + Shift + P` (Cmd + Shift + P on macOS) to open the Command Palette.
+   - Type `Select Interpreter` and choose `Enter interpreter path...`.
+   - Enter the path to the Python interpreter located in the `venv` folder.
+
+3. **Activate the Virtual Environment:**
 
    - **Windows:**
      ```bash
@@ -41,7 +52,7 @@ Follow these steps to set up and configure MediBot on your local machine.
      source venv/bin/activate
      ```
 
-3. **Install Python Dependencies:**
+4. **Install Python Dependencies:**
 
    ```bash
    pip install -r requirements.txt
@@ -69,14 +80,22 @@ Follow these steps to set up and configure MediBot on your local machine.
 
 ## How to Run
 
-1. **Start Server:**
+1. **Activate Python Script:**
 
    ```bash
    cd path/to/server
    python main.py
    ```
 
-2. **Start Client:**
+2. **Start Server:**
+
+   If your server requires starting a database, use the appropriate command or script. For example:
+   
+   ```bash
+   npm start
+   ```
+
+3. **Start Client:**
 
    Open a new terminal or command prompt window.
 
@@ -85,10 +104,10 @@ Follow these steps to set up and configure MediBot on your local machine.
    npm start
    ```
 
-3. **Access MediBot:**
+4. **Access MediBot:**
 
    Open the provided localhost URL in your web browser as shown in the client terminal.
 
 ---
 
-Make sure to replace `path/to/client` and `path/to/server` with the actual paths to your client and server directories. Adjust Python version (`python3`) and other commands based on your system setup.
+Ensure to replace `path/to/client` and `path/to/server` with the actual paths to your client and server directories. Adjust Python version (`python3`) and other commands based on your system setup. This guide now includes a clarified section for starting the database if needed and running the client and server applications using `npm start`.

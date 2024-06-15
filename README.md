@@ -2,6 +2,8 @@
 
 MediBot is a web application designed to provide instant medical assistance through a sophisticated chatbot interface. Whether you have medical questions or need reliable health information, MediBot is here to help.
 
+![Logo](demo_data/cartoon-bot.png)
+
 ---
 
 ## Features

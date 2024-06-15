@@ -20,9 +20,9 @@ To set up **MediBot** and configure your environment, please refer to the [CONFI
 
 ---
 
-## Demo Video
+## Demo GIF
 
-![Demo Video](demo_data/vid-demo.mp4)
+![Demo GIF](demo_data/demo-gif.gif)
 
 ---
 

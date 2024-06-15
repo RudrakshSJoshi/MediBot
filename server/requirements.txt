@@ -1,0 +1,7 @@
+chromadb
+flask
+flask-cors
+python-dotenv
+langchain-community
+langchain-groq
+langchain-cohere

@@ -55,4 +55,3 @@ server/__pycache__/
 
 # Ignore specific files
 client/src/test.jpg
-server/main.py

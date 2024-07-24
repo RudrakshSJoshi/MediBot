@@ -24,7 +24,7 @@ const Signup = () => {
 			toast.success("Registration Successfully", { id: "signup" });
 			navigate("/");
 		} catch (error) {
-			console.log(error);
+			// console.log(error);
 			toast.error("Signup Failed", { id: "signup" });
 		}
 	};

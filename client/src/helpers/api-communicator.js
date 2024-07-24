@@ -61,10 +61,10 @@ export const signupUser = async (name, email, password) => {
 // };
 
 export const sendChatRequest = async (message) => {
-	// console.log("From Frontend : ", message);
+	// console.log("From Frontend pass to api communicator : ", message);
 	const res = await axios.post(
 		"http://localhost:5000/detect",
-		{ input: message },
+		message,
 		{
 			headers: {
 				"Content-Type": "application/json",
@@ -75,13 +75,13 @@ export const sendChatRequest = async (message) => {
 	if (res.status !== 200) {
 		throw new Error("Unable to send chat from Model");
 	}
-	const modelMessage = { role: "assistant", content: res.data };
-	const userMessage = { role: "user", content: message };
+	const modelMessage = { role: "assistant", content: res.data.response };
+	const userMessage = { role: "user", content: message.query };
 	// console.log(modelMessage);
 	// console.log(userMessage);
+
 	const userResponse = await axios.post("/chat/new", userMessage);
-	// console.log("User Message has been saved in backed");
-	
+	// console.log("User Message has been saved in backend");
 	const response = await axios.post("/chat/new", modelMessage);
 
 	if (response.status !== 200 || userResponse.status !== 200) {

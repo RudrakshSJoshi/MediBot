@@ -9,6 +9,7 @@ import {
 	signupUser,
 } from "../helpers/api-communicator";
 import axios from "axios";
+import { saveAs } from 'file-saver';
 
 const AuthContext = createContext();
 
@@ -39,7 +40,6 @@ export const AuthProvider = ({ children }) => {
 		}
 	};
 	const logout = async () => {
-		await axios.post("http://localhost:5000/reset");
 		await logoutUser();
 		setUser("");
 		setIsLoggedIn(false);
@@ -53,32 +53,9 @@ export const AuthProvider = ({ children }) => {
 		}
 	};
 
-	
-
-	const downloadChat = async (e) => {
-		e.preventDefault();
-		try {
-			const res = await axios.get("http://localhost:5000/download", {
-				responseType: "blob", // Important to get the response as a Blob
-			});
-
-			// Create a link element
-			const url = window.URL.createObjectURL(new Blob([res.data]));
-			const link = document.createElement("a");
-			link.href = url;
-			link.setAttribute("download", `${user.name} Chats`); // Set the file name
-
-			// Append to the document
-			document.body.appendChild(link);
-
-			// Trigger the download
-			link.click();
-
-			// Clean up and remove the link
-			link.parentNode.removeChild(link);
-		} catch (error) {
-			console.error("Error downloading the file:", error);
-		}
+	const downloadChat = (conversationHistory) => {
+		const blob = new Blob([conversationHistory], { type: 'text/plain;charset=utf-8' });
+		saveAs(blob, 'chat_history.txt');
 	};
 
 	const value = {

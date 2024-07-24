@@ -1,7 +1,9 @@
-chromadb
+faiss-cpu
 flask
 flask-cors
 python-dotenv
 langchain-community
-langchain-groq
-langchain-cohere
+langchain_google_genai
+torch
+fitz
+pymupdf

@@ -2,7 +2,6 @@
 
 import { useState, useEffect, useRef } from "react";
 import { Box, Avatar, Typography, Button, IconButton } from "@mui/material";
-// import red from "@mui/material/colors/red";
 import { useAuth } from "../contexts/AuthContext";
 import ChatItem from "../components/ChatItem";
 import { IoMdSend } from "react-icons/io";
@@ -13,14 +12,18 @@ import {
 	sendChatRequest,
 } from "../helpers/api-communicator";
 import toast from "react-hot-toast";
-import axios from "axios";
 
 const Chat = () => {
 	const navigate = useNavigate();
 	const inputRef = useRef(null);
-	const chatBoxRef = useRef(null); // Ref to hold reference to the chat box container
+	const chatBoxRef = useRef(null);
 	const auth = useAuth();
 	const [chatMessages, setChatMessages] = useState([]);
+	const [context, setContext] = useState({
+		lastUserQuery: "The user hasn't yet asked a question",
+		lastBotAnswer: "No answer, as user hasn't asked anything before",
+		conversation_history: "",
+	});
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
@@ -28,10 +31,32 @@ const Chat = () => {
 		if (inputRef && inputRef.current) {
 			inputRef.current.value = "";
 		}
+		const payload = {
+			query: content,
+			last_user_query: context.lastUserQuery,
+			last_bot_answer: context.lastBotAnswer,
+		}
+
 		const newMessage = { role: "user", content };
 		setChatMessages((prev) => [...prev, newMessage]);
-		const chatData = await sendChatRequest(content);
+
+		setContext((prev) => ({
+			...prev,
+			conversation_history: `${prev.conversation_history}User: ${content}\n`,
+		}));
+
+		const chatData = await sendChatRequest(payload);
+		// console.log("Chat jsx  : chatData ", chatData);
 		setChatMessages((prev) => [...prev, chatData]);
+
+		// console.log("All the chat messages yet : ", chatMessages);
+		setContext((prev) => ({ ...prev, lastUserQuery: content }));
+		setContext((prev) => ({ ...prev, lastBotAnswer: chatData.content }));
+		setContext((prev) => ({
+			...prev,
+			conversation_history: `${prev.conversation_history}MediBOT: ${chatData.content}\n`,
+		}));
+		// console.log("All Contexts are set");
 	};
 
 	const handleDeleteChats = async () => {
@@ -39,10 +64,14 @@ const Chat = () => {
 			toast.loading("Deleting Chats", { id: "deletechats" });
 			await deleteUserChats();
 			setChatMessages([]);
-			await axios.post("http://localhost:5000/reset");
+			setContext({
+				lastUserQuery: "The user hasn't yet asked a question",
+				lastBotAnswer: "No answer, as user hasn't asked anything before",
+				prevAskedIngredients: "Not Asked Anything",
+			});
 			toast.success("Deleted Chats Successfully", { id: "deletechats" });
 		} catch (error) {
-			console.log(error);
+			// console.log(error);
 			toast.error("Deleting chats failed", { id: "deletechats" });
 		}
 	};
@@ -58,7 +87,7 @@ const Chat = () => {
 					});
 				})
 				.catch((err) => {
-					console.log(err);
+					// console.log(err);
 					toast.error("Loading Failed", { id: "loadchats" });
 				});
 		}
@@ -68,7 +97,7 @@ const Chat = () => {
 		if (chatBoxRef.current) {
 			chatBoxRef.current.scrollTop = chatBoxRef.current.scrollHeight;
 		}
-	}, [chatMessages]); // Scroll to bottom whenever chatMessages change
+	}, [chatMessages]);
 
 	useEffect(() => {
 		if (!auth?.user) {
@@ -146,10 +175,33 @@ const Chat = () => {
 						You can ask various questions related to health and get
 						a structured and optimal solution
 					</Typography>
+
+				<Button
+					variant="contained"
+					sx={{
+						width: "200px",
+						bottom: "40px",
+						my: "auto",
+						color: "white",
+						fontWeight: "700",
+						borderRadius: 3,
+						mx: "auto",
+						bgcolor: "brown",
+						":hover": {
+						bgcolor: "white",
+						color: "brown",
+						},
+					}}
+					onClick={() => auth.downloadChat(context.conversation_history)}
+					>
+					Download Chats
+					</Button>
+
 					<Button
 						onClick={handleDeleteChats}
 						sx={{
 							width: "200px",
+							bottom: "40px",
 							my: "auto",
 							color: "white",
 							fontWeight: "700",
@@ -172,7 +224,7 @@ const Chat = () => {
 					flex: { md: 0.8, xs: 1, sm: 1 },
 					flexDirection: "column",
 					px: 3,
-					backgroundColor: "rgba(0, 128, 0, 0.8)", // Adjust the RGB values and opacity as desired
+					backgroundColor: "rgba(0, 128, 0, 0.8)",
 					borderRadius: "20px",
 					marginRight: "5px",
 					marginLeft: "5px",
@@ -186,13 +238,13 @@ const Chat = () => {
 						mx: "auto",
 						fontWeight: "800",
 						textShadow: "0 2px 2px black",
-						userSelect: "none", // Disable user selection
+						userSelect: "none",
 					}}
 				>
 					MediBot - Your Personal Healthcare Assistant
 				</Typography>
 				<Box
-					ref={chatBoxRef} // Assign ref to the chat box container
+					ref={chatBoxRef}
 					sx={{
 						width: "100%",
 						height: "60vh",
@@ -200,16 +252,17 @@ const Chat = () => {
 						mx: "auto",
 						display: "flex",
 						flexDirection: "column",
-						overflowY: "auto", // Enable vertical scrolling
-						scrollbarWidth: "none", // Firefox
+						overflowY: "auto",
+						scrollbarWidth: "none",
 						"&::-webkit-scrollbar": {
-							display: "none", // Hide scrollbar for Chrome, Safari, and Edge
+							display: "none",
 						},
 						scrollBehavior: "smooth",
 					}}
 				>
 					{chatMessages.map((chat, index) => (
 						<ChatItem
+							
 							content={chat.content}
 							role={chat.role}
 							key={index}
@@ -229,7 +282,7 @@ const Chat = () => {
 					<input
 						ref={inputRef}
 						type="text"
-						onKeyDown={handleKeyDown} // Add the onKeyDown event listener
+						onKeyDown={handleKeyDown}
 						style={{
 							width: "100%",
 							backgroundColor: "transparent",

@@ -8,6 +8,7 @@ import { Link } from "react-router-dom"; // Assuming NavigationLink uses React R
 
 const Header = () => {
 	const auth = useAuth();
+	// console.log(auth);
 
 	return (
 		<AppBar
@@ -22,25 +23,6 @@ const Header = () => {
 				<div>
 					{auth?.isLoggedIn ? (
 						<>
-							<Button
-								variant="contained"
-								sx={{
-									color: "green",
-									backgroundColor: "white",
-									fontSize: "17px",
-									borderRadius: "13px",
-									marginRight: "13px",
-									padding: "4px 20px",
-									"&:hover": {
-										backgroundColor: "green",
-										color: "white",
-									},
-								}}
-								onClick={auth.downloadChat}
-							>
-								Download Chats
-							</Button>
-
 							<Button
 								component={Link}
 								to="/chat"

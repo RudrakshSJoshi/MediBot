@@ -11,7 +11,7 @@ const getAllUsers = async (req, res) => {
 		const user = await User.find();
 		return res.status(200).json({ message: "Changa", user });
 	} catch (error) {
-		console.log(error.message);
+		// console.log(error.message);
 		return res.status(200).json({ message: "GDBD", cause: error.message });
 	}
 };
@@ -52,7 +52,7 @@ const userSignup = async (req, res) => {
 			email: user.email,
 		});
 	} catch (error) {
-		console.log(error.message);
+		// console.log(error.message);
 		res.status(200).json({
 			message: "Failed to create user",
 			cause: error.message,
@@ -79,7 +79,7 @@ const userLogin = async (req, res) => {
 		const token = createToken(user);
 		const expires = new Date();
 		expires.setDate(expires.getDate() + 30);
-		console.log(token);
+		// console.log(token);
 		res.cookie(COOKIE_NAME, token, {
 			path: "/",
 			domain: "localhost",
@@ -94,7 +94,7 @@ const userLogin = async (req, res) => {
 			email: user.email,
 		});
 	} catch (error) {
-		console.log(error.message);
+		// console.log(error.message);
 		res.status(200).json({
 			message: "Failed to login user",
 			cause: error.message,
@@ -105,13 +105,13 @@ const userLogin = async (req, res) => {
 const verifyUser = async (req, res) => {
 	try {
 		const user = await User.findById(res.locals.jwtData.id);
-		console.log("userController tak to aaya");
+		// console.log("userController tak to aaya");
 		if (!user) {
 			return res
 				.status(401)
 				.send("User Not Registered or Token Malfunctioned");
 		}
-		console.log(user);
+		// console.log(user);
 		if (user._id.toString() !== res.locals.jwtData.id) {
 			return res.status(401).send("Token Not matched with correct user");
 		}
@@ -123,7 +123,7 @@ const verifyUser = async (req, res) => {
 			email: user.email,
 		});
 	} catch (error) {
-		console.log(error.message);
+		// console.log(error.message);
 		res.status(200).json({
 			message: "Failed to login user",
 			cause: error.message,
@@ -147,7 +147,7 @@ const userLogout = async(req, res)=>{
 		});
 		res.status(200).json({message: "User Logged Out Successfully"});
 	}catch(error){
-		console.log(error.message);
+		// console.log(error.message);
 		res.status(200).json({
 			message: "Failed to logout user",
 			cause: error.message,

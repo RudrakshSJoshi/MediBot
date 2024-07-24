@@ -16,7 +16,7 @@ const BACKEND_PORT = "8000";
 axios.defaults.baseURL = `http://localhost:${BACKEND_PORT}/api`;
 axios.defaults.withCredentials = true;
 
-console.log(BACKEND_PORT);
+// console.log(BACKEND_PORT);
 
 const theme = createTheme({
 	typography: {
